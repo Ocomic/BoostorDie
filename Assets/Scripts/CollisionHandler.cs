@@ -2,9 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CollisionHandler : MonoBehaviour
 {
+    [SerializeField] float delay = 1f;
+                
     void OnCollisionEnter(Collision collision)
     {
         switch (collision.gameObject.tag)
@@ -13,16 +16,52 @@ public class CollisionHandler : MonoBehaviour
                 Debug.Log("is friendly");
                 break;
             case "Finish":
-                Debug.Log("you finished");
+                SuccessSequence();                
+                //Debug.Log("you finished");
                 break;
             case "Fuel":
                 Debug.Log("you are fueled");
                 break;
-            case "Obstacle":
-                Debug.Log("you hit something");
+            default:
+                StartCrashSequence();                
+                //Debug.Log("you hit something");
                 break;
         }
     }
+
+    void ReloadLevel()
+    {
+        int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        SceneManager.LoadScene(currentSceneIndex);
+        
+    }
     
+    void LoadNextLevel()
+    {
+        int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        int nextSceneIndex = currentSceneIndex + 1;
+        if(nextSceneIndex == SceneManager.sceneCountInBuildSettings)
+        {
+            nextSceneIndex = 0;
+        }
+        SceneManager.LoadScene(nextSceneIndex);
+    }
+
+    void StartCrashSequence()
+    {
+        //todo add sound effect for crash
+        //todo add particle effect on crash
+        GetComponent<Movement>().enabled = false;
+        Invoke("ReloadLevel", delay);
+        
+    }
+
+    void SuccessSequence()
+    {
+        //todo add sound effect for success
+        //todo add particle effect on success
+        GetComponent<Movement>().enabled = false;
+        Invoke("LoadNextLevel", delay);
+    }
  
 }
