@@ -4,12 +4,15 @@ using UnityEngine;
 
 public class Movement : MonoBehaviour
 {
-    Rigidbody rbodyRocket;
-    AudioSource audioSource;
+    
     [SerializeField] float mainThrust = 1000f;
     [SerializeField] Vector3 roatation = Vector3.forward;
     [SerializeField] float rotationSpeed = 100f;
     [SerializeField] AudioClip mainEngine;
+
+    Rigidbody rbodyRocket;
+    AudioSource audioSource;
+
 
     // Start is called before the first frame update
     void Start()
