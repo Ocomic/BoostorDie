@@ -9,6 +9,7 @@ public class Movement : MonoBehaviour
     [SerializeField] float mainThrust = 1000f;
     [SerializeField] Vector3 roatation = Vector3.forward;
     [SerializeField] float rotationSpeed = 100f;
+    [SerializeField] AudioClip mainEngine;
 
     // Start is called before the first frame update
     void Start()
@@ -30,7 +31,7 @@ public class Movement : MonoBehaviour
             rbodyRocket.AddRelativeForce(Vector3.up * mainThrust * Time.deltaTime);
             if (!audioSource.isPlaying)
             {
-                audioSource.Play();
+                audioSource.PlayOneShot(mainEngine);
             }
            
             //Debug.Log("Space pressed");
