@@ -36,44 +36,78 @@ public class Movement : MonoBehaviour
     {
         if(Input.GetKey(KeyCode.Space))
         {
-            rbodyRocket.AddRelativeForce(Vector3.up * mainThrust * Time.deltaTime);
-            if (!audioSource.isPlaying)
-            {
-                audioSource.PlayOneShot(mainEngine);
-                mainThruster1.Play();
-                mainThruster2.Play();
-            }
-           
-            //Debug.Log("Space pressed");
+            StartThrusting();
         }
         else
         {
-            audioSource.Stop();
-            mainThruster1.Stop();
-            mainThruster2.Stop();
+            StopThrusting();
         }
 
+    }       
+
+    void StartThrusting()
+    {
+        rbodyRocket.AddRelativeForce(Vector3.up * mainThrust * Time.deltaTime);
+        if (!audioSource.isPlaying)
+        {
+            audioSource.PlayOneShot(mainEngine);
+
+        }
+        if (!mainThruster1.isPlaying)
+        {
+            mainThruster1.Play();
+            mainThruster2.Play();
+        }
+
+        //Debug.Log("Space pressed");
     }
+    void StopThrusting()
+    {
+        audioSource.Stop();
+        mainThruster1.Stop();
+        mainThruster2.Stop();
+    }
+
     void ProcessRotation()
     {
         if (Input.GetKey(KeyCode.A))
         {
-            ApplyRotation(rotationSpeed);
-            leftThrust.Play();
+            RotateLeft();
         }
         else if (Input.GetKey(KeyCode.D))
         {
-            ApplyRotation(-rotationSpeed);
-            rightThrust.Play();
+            RotateRight();
         }
         else
         {
-            leftThrust.Stop();
-            rightThrust.Stop();
+            StopRotating();
         }
-        
-    }
 
+    }
+    private void RotateLeft()
+    {
+        ApplyRotation(rotationSpeed);
+        if (!leftThrust.isPlaying)
+        {
+            leftThrust.Play();
+
+        }
+    }
+    private void RotateRight()
+    {
+        ApplyRotation(-rotationSpeed);
+        if (!rightThrust.isPlaying)
+        {
+            rightThrust.Play();
+
+        }
+    }
+    private void StopRotating()
+    {
+        leftThrust.Stop();
+        rightThrust.Stop();
+    }  
+       
     private void ApplyRotation(float rotationThisFrame)
     {
         rbodyRocket.freezeRotation = true; //freez roatation so we can manually rotate

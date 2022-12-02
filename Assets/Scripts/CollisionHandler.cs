@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Windows;
 
 public class CollisionHandler : MonoBehaviour
 {
@@ -19,15 +20,21 @@ public class CollisionHandler : MonoBehaviour
     
 
     bool isTransitioning = false;
+    bool collisionDisabled = false;
 
     void Start()
     {
         audioSource = GetComponent<AudioSource>();     
         
     }
+
+    void Update()
+    {
+        CheatKeys();
+    }
     void OnCollisionEnter(Collision collision)
     {
-        if (isTransitioning){return;}
+        if (isTransitioning || collisionDisabled){return;}
 
         switch (collision.gameObject.tag)
         {
@@ -88,6 +95,19 @@ public class CollisionHandler : MonoBehaviour
         GetComponent<Movement>().enabled = false;
         audioSource.PlayOneShot(success);
         Invoke("LoadNextLevel", delay);
+    }
+
+    void CheatKeys()
+    {
+        if(UnityEngine.Input.GetKeyDown(KeyCode.L))
+        {
+            LoadNextLevel();
+        }
+        else if(UnityEngine.Input.GetKeyDown(KeyCode.C))
+        {
+            collisionDisabled = !collisionDisabled; //toggle collision
+            
+        }
     }
  
 }
