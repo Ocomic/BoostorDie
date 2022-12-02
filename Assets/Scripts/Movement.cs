@@ -10,6 +10,11 @@ public class Movement : MonoBehaviour
     [SerializeField] float rotationSpeed = 100f;
     [SerializeField] AudioClip mainEngine;
 
+    [SerializeField] ParticleSystem mainThruster1;
+    [SerializeField] ParticleSystem mainThruster2;
+    [SerializeField] ParticleSystem rightThrust;
+    [SerializeField] ParticleSystem leftThrust;
+
     Rigidbody rbodyRocket;
     AudioSource audioSource;
 
@@ -35,6 +40,8 @@ public class Movement : MonoBehaviour
             if (!audioSource.isPlaying)
             {
                 audioSource.PlayOneShot(mainEngine);
+                mainThruster1.Play();
+                mainThruster2.Play();
             }
            
             //Debug.Log("Space pressed");
@@ -42,6 +49,8 @@ public class Movement : MonoBehaviour
         else
         {
             audioSource.Stop();
+            mainThruster1.Stop();
+            mainThruster2.Stop();
         }
 
     }
@@ -50,11 +59,19 @@ public class Movement : MonoBehaviour
         if (Input.GetKey(KeyCode.A))
         {
             ApplyRotation(rotationSpeed);
+            leftThrust.Play();
         }
         else if (Input.GetKey(KeyCode.D))
         {
             ApplyRotation(-rotationSpeed);
+            rightThrust.Play();
         }
+        else
+        {
+            leftThrust.Stop();
+            rightThrust.Stop();
+        }
+        
     }
 
     private void ApplyRotation(float rotationThisFrame)
